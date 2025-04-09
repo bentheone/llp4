@@ -78,18 +78,42 @@
             h1 {
                 font-weight: 500;
             }
-            button a {
-                text-decoration: none;
-                color: white;
-            }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main">    
-            <h1>Welcome to the Stock System</h1>
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dicta possimus beatae eius in voluptatum accusantium repellendus voluptates doloremque ab!</h4>
-            <button><a href="/register">Get Started</a></button>
+        <div class="form-container">
+            <h1>Stock System</h1>
+            <h2>Register Here!</h2>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+            @endif
+            <form action="{{route('register')}}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="names">Names</label>
+                    <input type="text" name="names" id="names" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                </div>
+                <p>Already have an account? <a href="/login">Login Here!</a></p>
+            </form>
         </div>
     </div>
     <div class="footer">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
+    <title>Login</title>
     <style>
             @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
@@ -78,18 +78,38 @@
             h1 {
                 font-weight: 500;
             }
-            button a {
-                text-decoration: none;
-                color: white;
-            }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main">    
-            <h1>Welcome to the Stock System</h1>
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dicta possimus beatae eius in voluptatum accusantium repellendus voluptates doloremque ab!</h4>
-            <button><a href="/register">Get Started</a></button>
+        <div class="form-container">
+            <h1>Stock System</h1>
+            <h2>Welcome Back!</h2>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                
+            @endif
+            <form action="{{route('login')}}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Login</button>
+                </div>
+                <p>Don't have an account? <a href="/register">Register Here</a></p>
+            </form>
         </div>
     </div>
     <div class="footer">

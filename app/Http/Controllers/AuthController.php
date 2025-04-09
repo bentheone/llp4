@@ -27,7 +27,7 @@ class AuthController extends Controller
     
             Auth::login($user);
     
-            return view('dashboard', compact('user'));
+            return redirect()->route('/dashboard')->with('user');
         } catch (\Exception $e) {
             return back()->withErrors(['register'=>'Something went wrong!']);
         }
@@ -41,7 +41,7 @@ class AuthController extends Controller
             'password'=> 'required'
         ]);
         if(Auth::attempt($request->all())) {
-            return view('dashboard', compact('user'));
+            return redirect()->route('/dashboard')->with('user');
         } else {
             return back()->withErrors(['login' => 'Invalid credentials']);
         }
@@ -50,6 +50,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return view('welcome',['success'=>'Logged out successfully!']);
+        return view('dash',['success'=>'Logged out successfully!']);
     }
 }
