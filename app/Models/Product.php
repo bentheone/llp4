@@ -11,8 +11,9 @@ class Product extends Model
     protected $fillable =[
         'user_id',
         'name',
+        'quantity',
         'price',
-        'quantity'
+        'category'
     ];
 
     public function stockOuts() {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\StockOut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockOutController extends Controller
 {
@@ -15,8 +16,10 @@ class StockOutController extends Controller
      */
     public function index()
     {
-        $stockOuts = StockOut::all();
-        return view('stockOut.index', compact('stockOuts'));
+        $user = Auth::user();
+        $stockOuts = $user->stockOuts()->with('product')->get();
+        $products = $user->products()->get();
+        return view('stockout.index', compact('stockOuts', 'user', 'products'));
     }
 
     /**
@@ -39,19 +42,34 @@ class StockOutController extends Controller
     {
         try 
         {
-
+            $user = Auth::user();
             $request->validate([
                 'product_id'=>'required|exists:products,id',
                 'quantity'=>'required|integer|min:1'
             ]);
             $product = Product::findOrFail($request->product_id);
+            $old_quantity = $product->quantity;
+            $new_quantity = $request->quantity;
+
+            if($new_quantity > $old_quantity ){
+                return back()->withErrors(['product'=>'Insufficient stock!']);
+            }
+            $remaining = $old_quantity - $new_quantity;
+            $product->update(['quantity'=>$old_quantity - $new_quantity]);
             $total_price = $product->price * $request->quantity;
-            $data = $request->all();
-            $data['total_price'] = $total_price;
-            StockOut::create($data);
+            
+            StockOut::create([
+                'product_id'=>$request->product_id,
+                'quantity'=> $request->quantity,
+                'total_price'=> $total_price,
+                'user_id'=>$user->id
+            ]);
+
+            return back()->with('success', "Stock Out success remaining $remaining in stock!");
 
         }catch(\Exception $e) {
-
+            dd($e->getMessage());
+            return back()->withErrors('stockIn', 'Something went wrong!');
         }
     }
 

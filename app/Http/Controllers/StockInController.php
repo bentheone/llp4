@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\StockIn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockInController extends Controller
 {
@@ -15,8 +16,10 @@ class StockInController extends Controller
      */
     public function index()
     {
-        $stockIns = StockIn::all();
-        return view('stockIn.index',compact('stockIns'));
+        $user = Auth::user();
+        $stockIns = $user->stockins()->with('product')->get();
+        $products = $user->products()->get();
+        return view('stockIn.index',compact('stockIns', 'user', 'products'));
     }
 
     /**
@@ -40,19 +43,24 @@ class StockInController extends Controller
     {
         try
         {
-            $request->validate([
+            $data = $request->validate([
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
+            'supplier_name' => 'required|string|max:255'
             ]);
 
             $product = Product::findOrFail($request->product_id);
             $total_price = $product->price * $request->quantity;
-            $data = $request->all();
+            $data['user_id'] = Auth::user()->id;
             $data['total_price'] = $total_price;
+            $old_quantity = $product->quantity;
+            $new_quantity = $request->quantity;
+            $product->update(['quantity'=> $old_quantity + $new_quantity]);
             StockIn::create($data);
             return back()->with('success', 'Product added successfully!');
         }catch (\Exception $e) {
-
+            dd($e->getMessage());
+            return back()->withErrors('stockin', 'Adding product in Failed!');
         }
 
         

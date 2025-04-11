@@ -78,6 +78,14 @@
             h1 {
                 font-weight: 500;
             }
+            .errors {
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                text-align: left;
+                color: red;
+                font-size: x-small;
+            }
     </style>
 </head>
 <body>
@@ -87,7 +95,7 @@
             <h2>Register Here!</h2>
             @if ($errors->any())
                 <div class="alert alert-danger">
-                    <ul>
+                    <ul class="errors">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach

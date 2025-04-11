@@ -57,13 +57,14 @@ button::hover {
     
 }
 
-.form-group input {
+.form-group input, .form-group select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
     outline: none;
 }
 h2, h1 {
+    padding: 10px 20px;
     margin-bottom: 10px;
 }
 h1 {
@@ -176,4 +177,89 @@ button a {
     cursor: pointer;
     border-bottom: 1px solid navy;
 }
+/* Pages */
+.errors {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: left;
+    color: red;
+    font-size: small;
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
 
+.user {
+    padding: 5px 20px ;
+    background-color: #ccc;
+    margin: 0 10px 0 0;
+    border-radius: 10px;
+}
+.bold {
+    font-weight: 700;
+}
+.resource-main {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+.resource-main .form-container form{
+    width: 50%;
+    padding: 0 10px;
+}
+.resource-main .form-container form button{
+    width: 100%;
+}
+.resource-main .table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    height: 400px;
+    background: #ccc;
+    margin: 10px;
+    width: 100%;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.table-container p {
+    padding: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    height: auto;
+}
+table thead tr th{
+    text-align: center;
+    font-weight: 500;
+    background: #8a8a8a;
+    padding: 10px 0;
+}
+table tbody tr td{
+    text-align: center;
+    padding: 10px 0;
+}
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+    height: 10vh;
+    margin-top: 5px;
+    background-color: rgba(0, 128, 0, 0.342);
+    width: 90%;
+    border-radius: 10px;
+    border: 1px solid green;
+}

@@ -31,10 +31,10 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
+})->name('dashboard');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'showStats']);
-    Route::resource('product', ProductController::class);
+    Route::resource('products', ProductController::class);
     Route::resource('stockin', StockInController::class);
     Route::resource('stockout', StockOutController::class);
 });

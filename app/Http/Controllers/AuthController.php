@@ -14,37 +14,42 @@ class AuthController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'names' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users',
-                'password'=>'required|string|min:6|confirmed'
+                'password'=>'required|string|min:6'
             ]);
             
             $user = User::create([
-                'name'=> $request->name,
+                'names'=> $request->names,
                 'email'=>$request->email,
                 'password'=> Hash::make($request->password)
             ]);
     
             Auth::login($user);
     
-            return redirect()->route('/dashboard')->with('user');
+            return redirect('/dashboard')->with('user', auth()->user());
         } catch (\Exception $e) {
-            return back()->withErrors(['register'=>'Something went wrong!']);
+            
+            return back()->withErrors(['register'=>$e->getMessage()]);
         }
 
     }
 
     public function login(Request $request)
     {
-        $request->validate([
+        try{
+            $credentials = $request->validate([
             'email'=> 'required|email',
             'password'=> 'required'
         ]);
-        if(Auth::attempt($request->all())) {
-            return redirect()->route('/dashboard')->with('user');
+        if(Auth::attempt($credentials)) {
+            return redirect('/dashboard')->with('user', auth()->user());
         } else {
-            return back()->withErrors(['login' => 'Invalid credentials']);
+            return back()->withErrors(['login' => 'Invalid credentials!']);
         }
+    }catch(\Exception $e) {
+        return back()->withErrors(['login' => $e->getMessage()]);
+    }
         
     }
     public function logout()

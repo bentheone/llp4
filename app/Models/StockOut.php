@@ -13,7 +13,6 @@ class StockOut extends Model
         'user_id',
         'quantity',
         'total_price',
-        'supplier_name'
     ];
 
     public function product() {
