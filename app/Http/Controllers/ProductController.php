@@ -83,6 +83,8 @@ class ProductController extends Controller
         if($product->user_id !== auth()->id()) {
             abort(403, 'Unauthorized');
         }
+        $product = $product->toArray();
+        // dd($product);
         return view('products.edit', compact('product'));
     }
 
@@ -104,7 +106,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($request->all());
-        return view('products.index')->with('success', 'Product updated successfully');
+        return redirect('/products')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -119,6 +121,6 @@ class ProductController extends Controller
             abort(403, 'Unauthorized!');
         }
         $product->delete();
-        return view('products.index')->with('success', 'Product deleted successfully!');
+        return to_route('products.index')->with('success', 'Product deleted successfully!');
     }
 }

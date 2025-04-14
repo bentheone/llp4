@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 
@@ -37,5 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('stockin', StockInController::class);
     Route::resource('stockout', StockOutController::class);
+    Route::get('/report', [ReportController::class, 'getReportPage']);
+    Route::post('/report', [ReportController::class, 'getReport']);
+    Route::get('/logout', [AuthController::class, 'logout']);
 });
 

@@ -35,10 +35,15 @@
                             <td>{{ $stockIn->supplier_name }}</td>
                             <td>{{ $stockIn->created_at }}</td>
                             <td class="actions">
-                                <div class="actions">
-                                    <p><a href="">Edit</a></p>
-                                    <p><a href="">Delete</a></p>
-                                </div>
+                                <p>
+                                    <a href="{{route('stockin.edit', $stockIn->id)}} ">Edit</a></p>
+                                <p>
+                                        <form action="{{route('stockin.destroy', $stockIn->id)}}" method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="delete" onclick="return confirm('Are you sure you want to delete this stockin?')">Delete</button>
+                                        </form>
+                                </p>
                             </td>
                         </tr>
                     @endforeach

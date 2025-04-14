@@ -88,7 +88,7 @@
     <div class="container">
         <div class="main">    
             <h1>Welcome to the Stock System</h1>
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dicta possimus beatae eius in voluptatum accusantium repellendus voluptates doloremque ab!</h4>
+            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore dicta possimus beatae eius in voluptatum accusantium repellendus voluptates doloremque ab. Or login <a href="/login">here!</a></h4>
             <button><a href="/register">Get Started</a></button>
         </div>
     </div>

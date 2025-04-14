@@ -72,12 +72,12 @@ class StockInController extends Controller
      * @param  \App\Models\StockIn  $stockIn
      * @return \Illuminate\Http\Response
      */
-    public function show(StockIn $stockIn)
+    public function show(StockIn $stockin)
     {   
-        if($stockIn->user_id !== auth()->id()) {
+        if($stockin->user_id !== auth()->id()) {
             abort(403, 'Unauthorized');
         }
-        return view('stockIn.show', compact('stockIn'));
+        return view('stockin.show', compact('stockIn'));
     }
 
     /**
@@ -86,12 +86,14 @@ class StockInController extends Controller
      * @param  \App\Models\StockIn  $stockIn
      * @return \Illuminate\Http\Response
      */
-    public function edit(StockIn $stockIn)
+    public function edit(StockIn $stockin)
     {
-        if($stockIn->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized');
-        }
-        return view('stockIn.edit', compact('stockIn'));
+        // if($stockIn->user_id !== auth()->id()) {
+        //     abort(403, 'Unauthorized');
+        // }
+        $user = Auth::user();
+        $products = $user->products()->get();
+        return view('stockIn.edit', compact('stockin', 'products', 'user'));
     }
 
     /**
@@ -101,13 +103,12 @@ class StockInController extends Controller
      * @param  \App\Models\StockIn  $stockIn
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StockIn $stockIn)
+    public function update(Request $request, StockIn $stockin)
     {
         
-        if($stockIn->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized');
-        }
-
+        // if($stockIn->user_id !== auth()->id()) {
+        //     abort(403, 'Unauthorized');
+        // }
         $request->validate([
             'product_id'=>'required|exists:products,id',
             'quantity'=>'required|numeric|min:1',
@@ -116,8 +117,9 @@ class StockInController extends Controller
         $total_price = $product->price * $request->quantity;
         $data = $request->all();
         $data['total_price'] = $total_price;
-        $stockIn->update($data);
-         return view('stockIn.index')->with('success', 'Stock in transaction recorded successfully!');
+        $stockin->update($data);
+        $product->update(['quantity'=>$request->quantity]);
+         return redirect('/stockin')->with('success', 'Stock in transaction recorded successfully!');
 
     }
 
@@ -127,13 +129,13 @@ class StockInController extends Controller
      * @param  \App\Models\StockIn  $stockIn
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StockIn $stockIn)
+    public function destroy(StockIn $stockin)
     {
         
-        if($stockIn->user_id !== auth()->id()) {
+        if($stockin->user_id !== auth()->id()) {
             abort(403, 'Unauthorized');
         }
-        $stockIn->delete();
+        $stockin->delete();
         return view('stockIn.index')->with('success', 'Stock In transaction deleted successfully!');
     }
 }

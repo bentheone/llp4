@@ -33,10 +33,15 @@
                             <td>{{ $stockOut->quantity }}</td>
                             <td>{{ $stockOut->created_at }}</td>
                             <td class="actions">
-                                <div class="actions">
-                                    <p><a href="">Edit</a></p>
-                                    <p><a href="">Delete</a></p>
-                                </div>
+                                <p>
+                                    <a href="{{route('stockout.edit', $stockOut->id)}} ">Edit</a></p>
+                                    <p>
+                                        <form action="{{route('stockout.destroy', $stockOut->id)}}" method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="delete" onclick="return confirm('Are you sure you want to delete this stockout?')">Delete</button>
+                                        </form>
+                                    </p>
                             </td>
                         </tr>
                     @endforeach

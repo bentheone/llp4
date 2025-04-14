@@ -93,12 +93,11 @@ class StockOutController extends Controller
      * @param  \App\Models\StockOut  $stockOut
      * @return \Illuminate\Http\Response
      */
-    public function edit(StockOut $stockOut)
+    public function edit(StockOut $stockout)
     {
-        if($stockOut->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized!');
-        }
-        return view('stockOut.edit', compact('stockOut'));
+        $user = Auth::user();
+        $products = $user->products()->get();
+        return view('stockOut.edit', compact('stockout', 'user', 'products'));
     }
 
     /**
@@ -108,9 +107,9 @@ class StockOutController extends Controller
      * @param  \App\Models\StockOut  $stockOut
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StockOut $stockOut)
+    public function update(Request $request, StockOut $stockout)
     {
-        if($stockOut->user_id !== auth()->id()) {
+        if($stockout->user_id !== auth()->id()) {
             abort(403, 'Unauthorized!');
         }
         $request->validate([
@@ -121,9 +120,12 @@ class StockOutController extends Controller
         $total_price = $product->price * $request->quantity;
         $data = $request->all();
         $data['total_price'] = $total_price;
-
-        $product->update($data);
-        return view('stockOuts.index')->with('success', 'Stock Out Transaction aupdated successfully!');
+        $current_stockout_quantity = $stockout->quantity;
+        $new_stockout_quantity=$request->quantity;
+        $stockout->update($data);
+        $product->update(['quantity'=>$product->quantity + $current_stockout_quantity]);
+        $product->update(['quantity'=>$product->quantity - $new_stockout_quantity]);
+        return redirect('/stockout')->with('success', 'Stock Out Transaction aupdated successfully!');
     }
 
     /**

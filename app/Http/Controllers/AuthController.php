@@ -7,6 +7,7 @@ use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -52,9 +53,12 @@ class AuthController extends Controller
     }
         
     }
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
-        return view('dash',['success'=>'Logged out successfully!']);
+        Auth::logout();                    
+        Session::flush();                 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken();
+        return redirect('/login');
     }
 }

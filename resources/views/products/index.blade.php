@@ -34,8 +34,14 @@
                             <td>{{ $product->category }}</td>
                             <td class="actions">
                                 <div class="actions">
-                                    <p><a href="">Edit</a></p>
-                                    <p><a href="">Delete</a></p>
+                                    <p><a href="{{route('products.edit', $product->id)}} ">Edit</a></p>
+                                    <p>
+                                        <form action="{{route('products.destroy', $product->id)}}" method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="delete" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                                        </form>
+                                    </p>
                                 </div>
                             </td>
                         </tr>
